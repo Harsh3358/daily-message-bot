@@ -10,8 +10,10 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
 
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot"
+    import os
+    _raw_url = os.environ.get("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot")
+    print(f"DEBUG - Raw DATABASE_URL from os.environ: {_raw_url}", flush=True)
+    DATABASE_URL: str = _raw_url
 
     # Telegram
     TELEGRAM_BOT_TOKEN: str = "mock_token"
