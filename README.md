@@ -1,5 +1,7 @@
 # DailyProblemBot 🤖
 
+🚀 **Live Production API:** [https://daily-message-bot-production.up.railway.app](https://daily-message-bot-production.up.railway.app) *(Try the Swagger UI!)*
+
 A production-style backend service built with **FastAPI**, **SQLAlchemy 2.x (Async)**, **PostgreSQL**, **Pydantic v2**, **APScheduler**, and the **Telegram Bot API**.
 
 The application automates delivering daily subject-specific technical problems (e.g., Java, DSA, DBMS) to designated Telegram groups every morning, with strict delivery idempotency and full audit logging.
