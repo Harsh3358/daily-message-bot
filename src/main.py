@@ -56,5 +56,12 @@ async def handle_app_exception(_request: Request, exc: AppException):
     )
 
 
+from fastapi.responses import JSONResponse, RedirectResponse
+
 # Include API Routers
 app.include_router(api_v1_router)
+
+@app.get("/", include_in_schema=False)
+async def root_redirect():
+    """Redirect the root URL to the Swagger documentation."""
+    return RedirectResponse(url="/docs")
