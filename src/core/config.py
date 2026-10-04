@@ -8,6 +8,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "DailyProblemBot"
     ENVIRONMENT: str = "development"
+    DEBUG: bool = False
     DATABASE_URL: str = os.environ.get("DATABASE_URL", "MISSING")
 
     @field_validator("DATABASE_URL", mode="before")
