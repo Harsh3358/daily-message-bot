@@ -8,9 +8,16 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "DailyProblemBot"
     ENVIRONMENT: str = "development"
-    DEBUG: bool = True
-
     DATABASE_URL: str = os.environ.get("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot")
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_database_url(cls, v: str) -> str:
+        """Convert Railway's postgresql:// to postgresql+asyncpg://"""
+        v = os.environ.get("DATABASE_URL", v)
+        if isinstance(v, str) and v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
 
 
     # Telegram
