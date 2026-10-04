@@ -1,7 +1,7 @@
+import os
 from functools import lru_cache
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 class Settings(BaseSettings):
     """Application configuration settings loaded from environment variables."""
@@ -10,10 +10,8 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
 
-    import os
-    _raw_url = os.environ.get("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot")
-    print(f"DEBUG - Raw DATABASE_URL from os.environ: {_raw_url}", flush=True)
-    DATABASE_URL: str = _raw_url
+    DATABASE_URL: str = os.environ.get("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot")
+
 
     # Telegram
     TELEGRAM_BOT_TOKEN: str = "mock_token"
