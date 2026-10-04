@@ -8,13 +8,24 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "DailyProblemBot"
     ENVIRONMENT: str = "development"
-    DATABASE_URL: str = os.environ.get("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot")
+    DATABASE_URL: str = os.environ.get("DATABASE_URL", "MISSING")
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
     def fix_database_url(cls, v: str) -> str:
-        """Convert Railway's postgresql:// to postgresql+asyncpg://"""
         v = os.environ.get("DATABASE_URL", v)
+        
+        if v == "MISSING" or "localhost" in v:
+            if os.environ.get("ENVIRONMENT", "development") == "production":
+                raise ValueError(
+                    "\n\nCRITICAL ERROR: DATABASE_URL environment variable is MISSING in Railway!\n"
+                    "Please go to your App Service -> Variables tab and add:\n"
+                    "Name: DATABASE_URL\n"
+                    "Value: ${{Postgres.DATABASE_URL}}\n"
+                    "Then trigger a manual Redeploy.\n"
+                )
+            return "postgresql+asyncpg://postgres:postgres@localhost:5432/daily_problem_bot"
+            
         if isinstance(v, str) and v.startswith("postgresql://"):
             return v.replace("postgresql://", "postgresql+asyncpg://", 1)
         return v
